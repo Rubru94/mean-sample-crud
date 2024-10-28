@@ -1,0 +1,11 @@
+/dist
+/node_modules
+/coverage
+/logs
+.nyc_output
+.scannerwork
+/src/static
+test-results.xml
+/deploy
+/pipelines
+/locales

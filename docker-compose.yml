@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  #express:
+  #  depends_on:
+  #    - mongodb
+  #  build:
+  #    context: ./express/.
+  #    dockerfile: Dockerfile
+  #  image: express-docker # Image name
+  #  container_name: express-app
+  #  restart: always # restart the container if it stops
+  #  entrypoint: ["/bin/sh", "-c"]
+  #  command:
+  #    - |
+  #      npm install
+  #      npm run build
+  #      npm start
+  #  volumes:
+  #    - ./express/:/express/
+  #  ports:
+  #    - "${APP_PORT}:${APP_PORT}"
+  #  env_file:
+  #    - ./express/.env
+  #  # environment: # Read from .env file by default, or env_file attribute
+  #  #  MONGO_DB_URI: ${MONGO_DB_URI}
+  #  #  APP_PORT: ${APP_PORT}
+
+  mongodb:
+    image: mongo:6
+    restart: always
+    container_name: mongo-db
+    ports:
+      - 27017:27017 # binding --> local port : container port
+    environment:
+      MONGOBD_DATABASE: test
+    volumes:
+      - ./mongodb:/data/db # binding --> local dir : container dir
