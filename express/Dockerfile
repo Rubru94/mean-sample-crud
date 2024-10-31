@@ -1,8 +1,8 @@
 FROM node:16
 
-WORKDIR /express/
+WORKDIR /express-app
 
-ADD . /express/
+ADD . /express-app
 
 RUN npm install && npm run build
 

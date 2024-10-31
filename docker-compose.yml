@@ -1,30 +1,53 @@
 version: "3"
 
 services:
-  #express:
-  #  depends_on:
-  #    - mongodb
-  #  build:
-  #    context: ./express/.
-  #    dockerfile: Dockerfile
-  #  image: express-docker # Image name
-  #  container_name: express-app
-  #  restart: always # restart the container if it stops
-  #  entrypoint: ["/bin/sh", "-c"]
-  #  command:
-  #    - |
-  #      npm install
-  #      npm run build
-  #      npm start
-  #  volumes:
-  #    - ./express/:/express/
-  #  ports:
-  #    - "${APP_PORT}:${APP_PORT}"
-  #  env_file:
-  #    - ./express/.env
-  #  # environment: # Read from .env file by default, or env_file attribute
-  #  #  MONGO_DB_URI: ${MONGO_DB_URI}
-  #  #  APP_PORT: ${APP_PORT}
+  angular:
+    depends_on:
+      - express
+    build:
+      context: ./angular/.
+      dockerfile: Dockerfile
+    image: angular-docker # Image name
+    container_name: angular-app
+    restart: always # restart the container if it stops
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        npm install
+        ng serve --host 0.0.0.0
+    volumes:
+      - ./angular/:/angular/
+    networks: # adding network
+      - mean-app
+    ports:
+      - "4200:4200"
+
+  express:
+    depends_on:
+      - mongodb
+    build:
+      context: ./express/.
+      dockerfile: Dockerfile
+    image: express-docker # Image name
+    container_name: express-app
+    restart: always # restart the container if it stops
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        npm install
+        npm run build
+        npm start
+    volumes:
+      - ./express/:/express/
+    networks: # adding network
+      - mean-app
+    ports:
+      - 3000:3000
+    env_file:
+      - ./express/.env
+    # environment: # Read from .env file by default, or env_file attribute
+    #  MONGO_DB_URI: ${MONGO_DB_URI}
+    #  APP_PORT: ${APP_PORT}
 
   mongodb:
     image: mongo:6
@@ -36,3 +59,9 @@ services:
       MONGOBD_DATABASE: test
     volumes:
       - ./mongodb:/data/db # binding --> local dir : container dir
+    networks: # adding network
+      - mean-app
+
+networks: # allow services to talk to each other while providing isolation from other docker container, running on the same host
+  mean-app:
+    driver: bridge

@@ -5,7 +5,7 @@ A MEAN(Mongodb, Express, Angular, Node) CRUD application using Typescript.
 ## Run
 
 ```bash
-$ docker compose --env-file ./express/.env up -d
+$ docker compose up -d
 ```
 
 
